@@ -43,7 +43,7 @@ This project follows a build-first, real-project approach:
   Current Phase: Chapter 2 — Tooling, Git & Project Scaffold
 - [x] Chapter 1 — Discovery, Sitemap & Content Plan
 - [x] Chapter 2 — Tooling, Git & Project Scaffold
-- [ ] Chapter 3 — Design System & Homepage
+- [x] Chapter 3 — Design System & Homepage
 - [ ] Chapter 4 — Product Catalog
 - [ ] Chapter 5 — Shopping Cart
 - [ ] Chapter 6 — Backend API
