@@ -108,3 +108,139 @@ Trade-offs:
 - The repository is minimal now
 - But each chapter will add what's needed
 - This keeps the project easy to understand
+
+Chapter 5 — Product Database
+
+Decision: Use SQLite for product data storage
+
+What:
+SQLite is the database for Kipepeo Market products.
+
+Why:
+
+* No separate database server required
+* Single file database (kipepeo.db)
+* Perfect for development
+* Easy to move to PostgreSQL later
+
+Alternatives Considered:
+
+* PostgreSQL (more complex to set up)
+* MySQL (more complex to set up)
+* MongoDB (different data model)
+
+Trade-offs:
+
+* SQLite is less powerful for large production systems
+* But it is perfect for learning and development
+* We can migrate to PostgreSQL later
+
+Decision: Use better-sqlite3 as the Node.js database driver
+
+What:
+better-sqlite3 connects Node.js to SQLite.
+
+Why:
+
+* Synchronous API (easier to understand)
+* Fast performance
+* Well-documented
+* Actively maintained
+
+Alternatives Considered:
+
+* sqlite3 (asynchronous, more complex)
+* knex.js (query builder, more overhead)
+
+Trade-offs:
+
+* Synchronous database operations can block Node.js for heavy or slow database work
+* But it is much easier to learn and understand
+* Fine for our current use case
+
+Decision: Store prices as integers (Kenyan Shillings)
+
+What:
+Prices are stored as whole numbers. For example, 4500 represents KSh 4,500.
+
+Why:
+
+* Easier to calculate
+* No formatting issues
+* Currency formatting is handled by the frontend
+
+Alternatives Considered:
+
+* Decimal type (more precise)
+* String with "KSh" prefix (hard to calculate)
+
+Trade-offs:
+
+* No fractional shillings
+* We do not need fractional shillings for this project
+* Simpler data structure
+
+Decision: Store image filenames, not full paths
+
+What:
+The database stores product-001.jpg instead of a complete file path.
+
+Why:
+
+* Database should not depend on Windows paths
+* Application constructs the full URL or file path
+* Works on any operating system
+
+Alternatives Considered:
+
+* Full Windows path (breaks on Linux or Mac)
+* Full URL (harder to change)
+
+Trade-offs:
+
+* Application must construct the full path
+* But this approach is cleaner and more portable
+
+Decision: Use INSERT OR IGNORE for seeding
+
+What:
+The seed script uses INSERT OR IGNORE to prevent duplicate products.
+
+Why:
+
+* Running the seed script multiple times should not create duplicates
+* The unique slug prevents duplicate product records
+
+Alternatives Considered:
+
+* INSERT INTO (could create duplicate data)
+* DELETE all products first (risk of losing data)
+
+Trade-offs:
+
+* Not all database systems support INSERT OR IGNORE
+* SQLite supports it
+* It is appropriate for development
+* Proper CRUD operations will be used later
+
+Decision: Separate database initialization from seeding
+
+What:
+init.js creates the database and table structure, while seed.js adds product data.
+
+Why:
+
+* Clear separation of concerns
+* Database can be initialized and seeded separately
+* Easier to reset and re-seed during development
+* Each script has a specific responsibility
+
+Alternatives Considered:
+
+* One large script (harder to maintain)
+* Automated migration system (more complex)
+
+Trade-offs:
+
+* Requires running two scripts instead of one
+* But the separation makes the project clearer and easier to maintain

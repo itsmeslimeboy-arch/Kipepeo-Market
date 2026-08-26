@@ -1,0 +1,14 @@
+{
+  "name": "kipepeo-market",
+  "version": "1.0.0",
+  "description": "Kipepeo Market full-stack e-commerce platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Tayib Mujeeb",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3"
+  }
+}

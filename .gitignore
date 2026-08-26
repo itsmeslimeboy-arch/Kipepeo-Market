@@ -35,3 +35,5 @@ logs/
   Temporary files
 tmp/
 temp/
+
+node_modules/ .env *.db .DS_Store Thumbs.db
