@@ -244,3 +244,66 @@ Trade-offs:
 
 * Requires running two scripts instead of one
 * But the separation makes the project clearer and easier to maintain
+
+Chapter 6 — Backend API
+## Decision: Use Express for the Kipepeo Market backend
+**What:** Express is used as the Node.js web framework.
+**Why:**
+- Simple routing
+- Works directly with Node.js
+- Easy to understand while learning backend development
+- Provides the foundation for future API endpoints
+**Alternatives Considered:**
+- Fastify (faster but more complex)
+- Koa (requires understanding of async/generators)
+- Built-in Node.js HTTP module (too low-level)
+**Trade-offs:**
+- Express requires us to structure more of the application ourselves
+- A larger framework could provide more built-in structure
+- The simplicity is useful for learning and for this project
+---
+## Decision: Use `server.js` as the application entry point
+**What:** `server.js` is the main Express server file.
+**Why:**
+- Already established in Chapter 5 through `package.json`
+- Provides one clear entry point for the backend
+- Allows the project to run with `npm start`
+---
+## Decision: The first API endpoint is `GET /api/products`
+**What:** The endpoint returns all products stored in the SQLite database.
+**Why:**
+- It creates the first complete database-to-API data flow
+- The frontend will consume this endpoint in the next chapter
+- It establishes the API pattern we will repeat for future resources
+---
+## Decision: API responses use JSON
+**What:** Product data is returned as JSON.
+**Why:**
+- JavaScript can consume JSON directly
+- JSON is the standard format used by web APIs
+- It provides a clean boundary between the backend and frontend
+---
+## Decision: Use a parameterized database query pattern
+**What:** Database queries are prepared through `better-sqlite3`.
+**Why:**
+- Keeps database access structured
+- Builds on the parameterized query practice introduced in Chapter 5
+- Provides a safe foundation for future API routes
+---
+## Decision: Graceful shutdown is implemented
+**What:** The server closes the database connection when stopped.
+**Why:**
+- Prevents database locks
+- Prevents memory leaks
+- Professional production practice
+---
+## Decision: CORS is not added yet
+**What:** No CORS configuration is added at this stage.
+**Why:**
+- The frontend and API will be served from the same origin
+- CORS will be added when cross-origin requests are required
+- Simplifies the learning process
+**Trade-offs:**
+- This approach only works when the frontend is served from the same origin
+- In production, we may need to configure CORS
+- But it avoids unnecessary complexity at this stage

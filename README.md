@@ -46,7 +46,7 @@ This project follows a build-first, real-project approach:
 - [x] Chapter 3 — Design System & Homepage
 - [x] Chapter 4 — Product Catalog
 - [x] Chapter 5 — Shopping Cart
-- [ ] Chapter 6 — Backend API
+- [x] Chapter 6 — Backend API
 - [ ] Chapter 7 — Database Integration
 - [ ] Chapter 8 — User Authentication
 - [ ] Chapter 9 — Admin Dashboard

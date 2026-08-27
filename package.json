@@ -9,6 +9,7 @@
   "author": "Tayib Mujeeb",
   "license": "ISC",
   "dependencies": {
-    "better-sqlite3": "^13.0.3"
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.2.1"
   }
 }
