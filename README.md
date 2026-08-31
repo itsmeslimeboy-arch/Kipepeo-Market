@@ -47,7 +47,7 @@ This project follows a build-first, real-project approach:
 - [x] Chapter 4 — Product Catalog
 - [x] Chapter 5 — Shopping Cart
 - [x] Chapter 6 — Backend API
-- [ ] Chapter 7 — Database Integration
+- [x] Chapter 7 — Database Integration
 - [ ] Chapter 8 — User Authentication
 - [ ] Chapter 9 — Admin Dashboard
 - [ ] Chapter 10 — Testing & Quality
@@ -142,3 +142,56 @@ Products Seeded:
    Category: Home
    Price: KSh 2,800
 
+Chapter 7: Frontend Integration
+**What Was Built:**
+- Express configured to serve frontend files
+- Homepage served through Express
+- `js/products.js` created
+- Fetch API connected to `/api/products`
+- Product JSON converted into JavaScript data
+- Product cards generated dynamically
+- Product images connected to local assets
+- Product prices formatted in KES
+- Loading state implemented
+- Empty product state implemented
+- API error state implemented
+- Responsive product grid implemented
+- Real Unsplash product images added
+- Asset register updated
+**Frontend → Backend Flow:**
+```text
+Homepage
+↓
+products.js
+↓
+fetch("/api/products")
+↓
+Express
+↓
+SQLite
+↓
+JSON
+↓
+products.js
+↓
+Product Cards Files Created:  js/products.js Files Updated:  index.html  css/style.css  server.js  docs/asset-register.md
+ docs/decisions-log.md  README.md text
+---
+## 💾 STEP 18: COMMIT AND PUSH
+### 18.1 — Check Git Status
+```cmd
+git status You should see: text
+modified: README.md
+modified: css/style.css
+modified: docs/asset-register.md
+modified: docs/decisions-log.md
+modified: index.html
+modified: server.js
+new file: assets/images/products/electronics/product-001.jpg
+new file: assets/images/products/electronics/product-002.jpg
+new file: assets/images/products/fashion/product-003.jpg
+new file: assets/images/products/home/product-004.jpg
+new file: assets/images/products/home/product-005.jpg
+new file: js/products.js You should NOT see: text
+kipepeo.db
+node_modules/

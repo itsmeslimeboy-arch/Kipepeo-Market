@@ -40,15 +40,14 @@ Instructions:
 | `category-beauty.jpg` | Beauty category | Unsplash | TBD | ⏳ Pending |
 | `category-lifestyle.jpg` | Lifestyle category | Unsplash | TBD | ⏳ Pending |
 
- Product Images (Future)
-| Filename | Purpose | Source | URL | Status |
-|----------|---------|--------|-----|--------|
-| `product-001.jpg` | Product 1 | Unsplash | TBD | ⏳ Pending |
-| `product-002.jpg` | Product 2 | Unsplash | TBD | ⏳ Pending |
-| `product-003.jpg` | Product 3 | Unsplash | TBD | ⏳ Pending |
-| `product-004.jpg` | Product 4 | Unsplash | TBD | ⏳ Pending |
-| `product-005.jpg` | Product 5 | Unsplash | TBD | ⏳ Pending |
-
+ Product Images
+| Filename | Purpose | Source | Source URL | Status |
+|----------|---------|--------|------------|--------|
+| `product-001.jpg` | Wireless Headphones | Unsplash | https://unsplash.com/photos/wireless-headphones-on-top-of-speaker-XdDyRTVo-iw | ✅ Downloaded |
+| `product-002.jpg` | Smart Watch | Unsplash | https://unsplash.com/photos/a-smart-watch-with-the-time-displayed-on-it-2uv7stai7Ok | ✅ Downloaded |
+| `product-003.jpg` | Classic Backpack | Unsplash | https://unsplash.com/photos/blue-backpack-_H0fjILH5Vw | ✅ Downloaded |
+| `product-004.jpg` | Ceramic Coffee Mug | Unsplash | https://unsplash.com/photos/white-ceramic-mug-with-coffee-Zgq3cqztoLI | ✅ Downloaded |
+| `product-005.jpg` | LED Desk Lamp | Unsplash | https://unsplash.com/photos/a-desk-lamp-sitting-on-top-of-a-black-block-LoD801xyx2A | ✅ Downloaded |
  VIDEOS (Future)
 | Filename | Purpose | Source | URL | Status |
 |----------|---------|--------|-----|--------|

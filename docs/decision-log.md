@@ -307,3 +307,67 @@ Chapter 6 — Backend API
 - This approach only works when the frontend is served from the same origin
 - In production, we may need to configure CORS
 - But it avoids unnecessary complexity at this stage
+
+Chapter 7 — Frontend Integration
+## Decision: Use fetch() for frontend API communication
+**What:** JavaScript uses the Fetch API to request product data from the Express backend.
+**Why:**
+- Built into modern browsers
+- No additional dependency required
+- Works naturally with JSON APIs
+- Easy to understand while learning frontend/backend integration
+**Alternatives Considered:**
+- Axios (requires installation)
+- XMLHttpRequest (older, more complex)
+- jQuery AJAX (requires jQuery)
+**Trade-offs:**
+- Error handling must be implemented manually
+- More advanced applications may use additional data-fetching libraries
+- The native Fetch API is sufficient for the current project
+---
+## Decision: Serve the frontend through Express
+**What:** Express serves the Kipepeo Market frontend files.
+**Why:**
+- Frontend and API use the same server
+- Avoids unnecessary CORS configuration
+- Creates a simple local development environment
+- Prepares the project for integrated frontend/backend deployment
+**Alternatives Considered:**
+- Separate frontend server (requires CORS)
+- Static hosting only (no API)
+**Trade-offs:**
+- One server serves both frontend and backend
+- Works for development, may need separation in production
+---
+## Decision: Product data is rendered dynamically
+**What:** Product cards are generated from API data instead of being hardcoded into HTML.
+**Why:**
+- Products already exist in SQLite
+- The API provides the single source of product data
+- Product changes can be made in the database
+- The frontend automatically reflects database changes
+**Trade-offs:**
+- Requires JavaScript to be enabled
+- Initial load shows "Loading..."
+- But provides a more dynamic experience
+---
+## Decision: Product image paths are generated from category and filename
+**What:** JavaScript builds the product image path using the product category and image filename.
+**Why:**
+- Keeps the database image field simple
+- Matches the existing asset folder structure
+- Keeps product assets organized by category
+- Avoids storing full frontend paths inside the database
+**Trade-offs:**
+- The frontend must know the folder structure
+- If the folder structure changes, the code must change
+---
+## Decision: Handle loading, empty and error states
+**What:** The product catalog displays appropriate messages while loading, when no products exist, and when the API fails.
+**Why:**
+- Prevents a blank interface
+- Provides useful feedback to customers
+- Demonstrates real-world frontend error handling
+**Trade-offs:**
+- More code to write and maintain
+- Better user experience
