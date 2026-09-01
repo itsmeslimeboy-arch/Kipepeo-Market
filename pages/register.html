@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account — Kipepeo Market</title>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/auth.js" defer></script>
+</head>
+<body>
+<main>
+<section class="auth-section">
+<div class="auth-container">
+<p class="section-label">ACCOUNT</p>
+<h1>Create Your Account</h1>
+<p>
+Create a Kipepeo Market account to manage
+your orders and account information.
+</p>
+<form id="register-form">
+<div class="form-group">
+<label for="name">
+Full Name
+</label>
+<input
+type="text"
+id="name"
+name="name"
+required
+autocomplete="name"
+>
+</div>
+<div class="form-group">
+<label for="email">
+Email Address
+</label>
+<input
+type="email"
+id="email"
+name="email"
+required
+autocomplete="email"
+>
+</div>
+<div class="form-group">
+<label for="password">
+Password
+</label>
+<input
+type="password"
+id="password"
+name="password"
+required
+autocomplete="new-password"
+>
+</div>
+<div class="form-group">
+<label for="confirm-password">
+Confirm Password
+</label>
+<input
+type="password"
+id="confirm-password"
+name="confirm-password"
+required
+autocomplete="new-password"
+>
+</div>
+<button type="submit">
+Create Account
+</button>
+</form>
+<div id="auth-message"></div>
+<p>
+Already have an account?
+<a href="login.html">Log in</a>
+</p>
+</div>
+</section>
+</main>
+</body>
+</html>

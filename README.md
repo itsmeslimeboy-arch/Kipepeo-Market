@@ -48,7 +48,7 @@ This project follows a build-first, real-project approach:
 - [x] Chapter 5 — Shopping Cart
 - [x] Chapter 6 — Backend API
 - [x] Chapter 7 — Database Integration
-- [ ] Chapter 8 — User Authentication
+- [x] Chapter 8 — User Authentication
 - [ ] Chapter 9 — Admin Dashboard
 - [ ] Chapter 10 — Testing & Quality
 - [ ] Chapter 11 — Security
@@ -195,3 +195,47 @@ new file: assets/images/products/home/product-005.jpg
 new file: js/products.js You should NOT see: text
 kipepeo.db
 node_modules/
+Chapter 8: User Authentication
+**What Was Built:**
+- Users table created
+- User registration implemented
+- Email uniqueness implemented
+- Password validation implemented
+- bcrypt installed
+- Password hashing implemented
+- Registration API created
+- Login page created
+- Login API created
+- bcrypt password comparison implemented
+- express-session installed
+- Authentication sessions implemented
+- `/api/auth/me` endpoint created
+- Protected account functionality implemented
+- Logout functionality implemented
+- Authentication tested in browser
+- Authentication tested with Thunder Client
+- Authentication tested with Windows curl
+- User verification script created
+**Authentication Endpoints:**
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| POST | `/api/auth/register` | Create a customer account |
+| POST | `/api/auth/login` | Authenticate a customer |
+| GET | `/api/auth/me` | Get the current authenticated user |
+| POST | `/api/auth/logout` | End the current session |
+**Files Created:**
+- `database/create-users-table.js`
+- `database/check-users.js`
+- `js/auth.js`
+- `pages/register.html`
+- `pages/login.html`
+- `pages/account.html`
+**Files Updated:**
+- `server.js`
+- `css/style.css`
+- `index.html`
+- `docs/decisions-log.md`
+- `README.md`
+**Dependencies Added:**
+- `bcrypt`
+- `express-session`

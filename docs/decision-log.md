@@ -371,3 +371,60 @@ Chapter 7 — Frontend Integration
 **Trade-offs:**
 - More code to write and maintain
 - Better user experience
+
+Chapter 8 — User Authentication
+## Decision: Use bcrypt for password hashing
+**What:** User passwords are hashed with bcrypt before being stored in SQLite.
+**Why:**
+- Passwords must never be stored as plain text
+- bcrypt is designed for password hashing
+- Provides a secure foundation for user authentication
+- Works directly with Node.js
+**Alternatives Considered:**
+- Plain-text passwords — rejected because they are insecure
+- SHA-256 — not designed specifically for password storage
+- Argon2 — strong alternative, but bcrypt keeps the current learning path simple
+**Trade-offs:**
+- Password hashing requires additional processing
+- bcrypt is slower than general-purpose hashing algorithms
+- The additional processing is intentional because password hashing should be difficult to brute-force
+---
+## Decision: Use email as the unique login identifier
+**What:** Each user account has a unique email address.
+**Why:**
+- Email addresses are familiar to customers
+- Provides a simple login identifier
+- SQLite UNIQUE constraint prevents duplicate accounts
+---
+## Decision: Use express-session for authentication sessions
+**What:** Logged-in customers are tracked using server-side sessions.
+**Why:**
+- Simple to understand
+- Works naturally with Express
+- Allows the server to identify authenticated users
+- Provides the foundation for protected routes
+**Trade-offs:**
+- Sessions require server-side session management
+- Production deployment requires appropriate session configuration
+- The development secret will later be moved to an environment variable
+---
+## Decision: Validate authentication on both frontend and backend
+**What:** Registration and login data are validated in JavaScript and Express.
+**Why:**
+- Frontend validation improves user experience
+- Backend validation protects the application
+- Client-side validation alone cannot be trusted
+---
+## Decision: Use a protected /api/auth/me endpoint
+**What:** The frontend uses `/api/auth/me` to determine whether a customer is authenticated.
+**Why:**
+- Keeps authentication decisions on the server
+- Allows the frontend to retrieve the current authenticated user
+- Provides a reusable pattern for future protected features
+---
+## Decision: Authentication uses the existing SQLite database
+**What:** User accounts are stored in the existing `kipepeo.db` database.
+**Why:**
+- Products and users belong to the same application
+- Keeps the current architecture simple
+- Allows future orders to reference users
