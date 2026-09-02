@@ -49,7 +49,7 @@ This project follows a build-first, real-project approach:
 - [x] Chapter 6 — Backend API
 - [x] Chapter 7 — Database Integration
 - [x] Chapter 8 — User Authentication
-- [ ] Chapter 9 — Admin Dashboard
+- [x] Chapter 9 — Admin Dashboard
 - [ ] Chapter 10 — Testing & Quality
 - [ ] Chapter 11 — Security
 - [ ] Chapter 12 — Deployment
@@ -237,5 +237,51 @@ Chapter 8: User Authentication
 - `docs/decisions-log.md`
 - `README.md`
 **Dependencies Added:**
+- `bcrypt`
+- `express-session`
+
+Chapter 9: Admin Dashboard
+**What Was Built:**
+- User roles introduced
+- Customer role implemented
+- Admin role implemented
+- Existing users preserved as customers
+- Admin account creation script created
+- Login session updated with user role
+- Admin authorization middleware created
+- Admin dashboard API created
+- Customer management API created
+- Protected admin dashboard created
+- Admin dashboard statistics implemented
+- Admin customer list implemented
+- Admin access tested
+- Customer access restriction tested
+- Logged-out access restriction tested
+- Admin logout implemented
+- Product database schema verification implemented
+**Authorization Rules:**
+| User State | Admin API |
+|------------|-----------|
+| Logged out | 401 |
+| Customer | 403 |
+| Admin | 200 |
+**Admin Endpoints:**
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| GET | `/api/admin/dashboard` | Dashboard statistics |
+| GET | `/api/admin/users` | View users |
+**Files Created:**
+- `database/add-user-role.js`
+- `database/create-admin.js`
+- `database/check-products-schema.js`
+- `pages/admin.html`
+**Files Updated:**
+- `server.js`
+- `js/auth.js`
+- `css/style.css`
+- `database/check-users.js`
+- `docs/decisions-log.md`
+- `README.md`
+**Authentication Dependencies:**
 - `bcrypt`
 - `express-session`

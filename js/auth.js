@@ -192,3 +192,150 @@ error
 );
 }
 
+// ============================================
+// ADMIN DASHBOARD
+// ============================================
+const adminWelcome =
+document.getElementById("admin-welcome");
+const userCount =
+document.getElementById("user-count");
+const productCount =
+document.getElementById("product-count");
+const adminCount =
+document.getElementById("admin-count");
+const userList =
+document.getElementById("user-list");
+if (
+adminWelcome &&
+userCount &&
+productCount &&
+adminCount
+) {
+async function loadAdminDashboard() {
+try {
+// ====================================
+// VERIFY CURRENT USER
+// ====================================
+const meResponse =
+await fetch("/api/auth/me");
+const meData =
+await meResponse.json();
+if (!meResponse.ok) {
+window.location.href =
+"/pages/login.html";
+return;
+}
+// ====================================
+// VERIFY ADMIN ROLE
+// ====================================
+if (meData.user.role !== "admin") {
+alert(
+"You do not have permission to access the admin dashboard."
+);
+window.location.href =
+"/pages/account.html";
+return;
+}
+adminWelcome.textContent =
+`Welcome, ${meData.user.name}.`;
+// ====================================
+// LOAD DASHBOARD
+// ====================================
+const dashboardResponse =
+await fetch(
+"/api/admin/dashboard"
+);
+const dashboardData =
+await dashboardResponse.json();
+if (!dashboardResponse.ok) {
+adminWelcome.textContent =
+"Unable to load dashboard.";
+return;
+}
+// ====================================
+// DISPLAY STATISTICS
+// ====================================
+userCount.textContent =
+dashboardData.statistics.users;
+productCount.textContent =
+dashboardData.statistics.products;
+adminCount.textContent =
+dashboardData.statistics.admins;
+// ====================================
+// LOAD USERS
+// ====================================
+const usersResponse =
+await fetch(
+"/api/admin/users"
+);
+const usersData =
+await usersResponse.json();
+if (usersResponse.ok) {
+userList.innerHTML =
+usersData.users
+.map(user => `
+<div class="admin-user">
+<strong>
+${user.name}
+</strong>
+<span>
+${user.email}
+</span>
+<span>
+Role:
+${user.role}
+</span>
+</div>
+`)
+.join("");
+}
+} catch (error) {
+console.error(
+"❌ Admin dashboard error:",
+error
+);
+adminWelcome.textContent =
+"Unable to load admin dashboard.";
+}
+}
+loadAdminDashboard();
+}
+
+// ============================================
+// ADMIN LOGOUT
+// ============================================
+const adminLogoutButton =
+document.getElementById(
+"admin-logout-button"
+);
+if (adminLogoutButton) {
+adminLogoutButton.addEventListener(
+"click",
+async () => {
+try {
+const response =
+await fetch(
+"/api/auth/logout",
+{
+method: "POST"
+}
+);
+const data =
+await response.json();
+if (!response.ok) {
+console.error(
+data.error
+);
+return;
+}
+window.location.href =
+"/pages/login.html";
+} catch (error) {
+console.error(
+"❌ Admin logout error:",
+error
+);
+}
+}
+);
+}

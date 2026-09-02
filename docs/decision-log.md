@@ -428,3 +428,63 @@ Chapter 8 — User Authentication
 - Products and users belong to the same application
 - Keeps the current architecture simple
 - Allows future orders to reference users
+
+Chapter 9 — Admin Dashboard
+## Decision: Use roles for authorization
+**What:**
+Users now have a role identifying them as either `customer` or `admin`.
+**Why:**
+- Authentication identifies the user
+- Authorization determines what the user can access
+- Customers and administrators require different permissions
+- Provides the foundation for protected administrative features
+---
+## Decision: New users default to customer
+**What:**
+Normal registration always creates users with the `customer` role.
+**Why:**
+- Customers should not be able to assign themselves admin privileges
+- The server controls authorization roles
+- Prevents client-side role manipulation
+---
+## Decision: Use server-side admin authorization middleware
+**What:**
+Protected administrator routes use `requireAdmin`.
+**Why:**
+- Centralizes authorization logic
+- Prevents duplicated permission checks
+- Protects admin APIs at the server level
+- Provides a reusable authorization pattern
+---
+## Decision: Distinguish HTTP 401 and 403
+**What:**
+The application uses `401` for unauthenticated requests and `403` for authenticated users without sufficient permissions.
+**Why:**
+- Clearly separates authentication from authorization
+- Makes API behavior easier to understand
+- Follows the application's security architecture
+---
+## Decision: Do not expose password hashes through admin APIs
+**What:**
+Administrative user queries return account information without the password column.
+**Why:**
+- Password hashes are authentication data
+- Administrators do not need password information
+- Reduces unnecessary exposure of sensitive data
+---
+## Decision: Reuse the existing authentication session
+**What:**
+The admin dashboard uses the same `express-session` authentication system created in Chapter 8.
+**Why:**
+- Avoids creating a second authentication system
+- Keeps the architecture consistent
+- Allows role information to travel with the authenticated session
+---
+## Decision: Preserve the existing products database
+**What:**
+Chapter 9 does not create a replacement products table.
+**Why:**
+- The products table was established in Chapter 5
+- Chapter 9 must build on the existing database
+- Prevents breaking the existing product API and frontend
+- Product CRUD must use the existing Chapter 5 schema
