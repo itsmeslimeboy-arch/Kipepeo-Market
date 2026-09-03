@@ -574,3 +574,14 @@ process.on("SIGINT", () => {
 
   process.exit(0);
 });
+
+// ============================================
+// ERROR RESPONSE HELPER
+// ============================================
+function sendError(res, status, message) {
+console.error(`❌ Error ${status}: ${message}`);
+return res.status(status).json({
+error: message,
+status: status
+});
+}
