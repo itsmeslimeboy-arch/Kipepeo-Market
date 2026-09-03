@@ -31,14 +31,12 @@ const PORT = 3000;
 // DATABASE CONNECTION
 // ============================================
 
-// Build the correct path to the SQLite database
 const dbPath = path.join(
   __dirname,
   "database",
   "kipepeo.db"
 );
 
-// Connect to SQLite
 const db = new Database(dbPath);
 
 console.log("✅ Database connected successfully.");
@@ -137,29 +135,17 @@ function requireCsrfToken(req, res, next) {
   const requestToken = req.get("X-CSRF-Token");
   const sessionToken = req.session.csrfToken;
 
-  // ========================================
-  // CHECK TOKEN EXISTS
-  // ========================================
-
   if (!requestToken || !sessionToken) {
     return res.status(403).json({
       error: "CSRF token required."
     });
   }
 
-  // ========================================
-  // CHECK TOKEN MATCHES
-  // ========================================
-
   if (requestToken !== sessionToken) {
     return res.status(403).json({
       error: "Invalid CSRF token."
     });
   }
-
-  // ========================================
-  // CSRF AUTHORIZED
-  // ========================================
 
   next();
 }
@@ -178,8 +164,6 @@ app.get("/", (req, res) => {
 
 app.get("/api/products", (req, res) => {
   try {
-    // Query products using a parameter-free
-    // prepared statement.
     const products = db
       .prepare(`
         SELECT *
@@ -188,7 +172,6 @@ app.get("/api/products", (req, res) => {
       `)
       .all();
 
-    // Return products as JSON
     res.json(products);
   } catch (error) {
     console.error(
@@ -197,7 +180,7 @@ app.get("/api/products", (req, res) => {
     );
 
     res.status(500).json({
-      error: "Failed to fetch products."
+      error: "Unable to load products."
     });
   }
 });
@@ -213,7 +196,7 @@ app.post(
   async (req, res) => {
     try {
       // ========================================
-      // GET AND NORMALIZE USER INPUT
+      // NORMALIZE INPUT
       // ========================================
 
       const name = String(
@@ -231,7 +214,7 @@ app.post(
       );
 
       // ========================================
-      // VALIDATE REQUIRED FIELDS
+      // REQUIRED FIELD VALIDATION
       // ========================================
 
       if (!name || !email || !password) {
@@ -242,7 +225,7 @@ app.post(
       }
 
       // ========================================
-      // VALIDATE NAME
+      // NAME VALIDATION
       // ========================================
 
       if (name.length < 2) {
@@ -253,7 +236,7 @@ app.post(
       }
 
       // ========================================
-      // VALIDATE EMAIL FORMAT
+      // EMAIL VALIDATION
       // ========================================
 
       const emailPattern =
@@ -267,7 +250,7 @@ app.post(
       }
 
       // ========================================
-      // VALIDATE PASSWORD LENGTH
+      // PASSWORD VALIDATION
       // ========================================
 
       if (password.length < 8) {
@@ -278,7 +261,7 @@ app.post(
       }
 
       // ========================================
-      // CHECK IF EMAIL ALREADY EXISTS
+      // CHECK EXISTING USER
       // ========================================
 
       const existingUser = db
@@ -304,13 +287,10 @@ app.post(
         await bcrypt.hash(password, 12);
 
       // ========================================
-      // CREATE USER
+      // INSERT CUSTOMER
       // ========================================
       //
-      // IMPORTANT:
-      // The role is NOT accepted from req.body.
-      // Every public registration creates a
-      // customer account.
+      // NEVER accept role from req.body.
       //
 
       const insertUser = db.prepare(`
@@ -331,7 +311,7 @@ app.post(
       );
 
       // ========================================
-      // SEND SUCCESS RESPONSE
+      // SUCCESS
       // ========================================
 
       res.status(201).json({
@@ -340,13 +320,16 @@ app.post(
         userId: result.lastInsertRowid
       });
     } catch (error) {
+      // Technical details stay in server logs.
       console.error(
-        "❌ Registration error:",
+        "❌ Internal registration error:",
         error
       );
 
+      // Generic message goes to client.
       res.status(500).json({
-        error: "Unable to create account."
+        error:
+          "An unexpected server error occurred."
       });
     }
   }
@@ -363,7 +346,7 @@ app.post(
   async (req, res) => {
     try {
       // ========================================
-      // GET AND NORMALIZE INPUT
+      // NORMALIZE INPUT
       // ========================================
 
       const email = String(
@@ -377,7 +360,7 @@ app.post(
       );
 
       // ========================================
-      // VALIDATE INPUT
+      // REQUIRED FIELD VALIDATION
       // ========================================
 
       if (!email || !password) {
@@ -388,7 +371,7 @@ app.post(
       }
 
       // ========================================
-      // VALIDATE EMAIL FORMAT
+      // EMAIL VALIDATION
       // ========================================
 
       const emailPattern =
@@ -405,9 +388,8 @@ app.post(
       // FIND USER
       // ========================================
       //
-      // IMPORTANT:
-      // This is a parameterized query.
-      // The email is supplied separately using ?.
+      // Parameterized query protects against
+      // SQL injection.
       //
 
       const user = db
@@ -429,7 +411,8 @@ app.post(
 
       if (!user) {
         return res.status(401).json({
-          error: "Invalid email or password."
+          error:
+            "Invalid email or password."
         });
       }
 
@@ -445,7 +428,8 @@ app.post(
 
       if (!passwordMatches) {
         return res.status(401).json({
-          error: "Invalid email or password."
+          error:
+            "Invalid email or password."
         });
       }
 
@@ -461,11 +445,12 @@ app.post(
       };
 
       // ========================================
-      // SUCCESS RESPONSE
+      // SUCCESS
       // ========================================
 
       res.json({
-        message: "Login successful.",
+        message:
+          "Login successful.",
         user: {
           id: user.id,
           name: user.name,
@@ -475,12 +460,13 @@ app.post(
       });
     } catch (error) {
       console.error(
-        "❌ Login error:",
+        "❌ Internal login error:",
         error
       );
 
       res.status(500).json({
-        error: "Unable to log in."
+        error:
+          "An unexpected server error occurred."
       });
     }
   }
@@ -491,19 +477,11 @@ app.post(
 // ============================================
 
 app.get("/api/auth/me", (req, res) => {
-  // ========================================
-  // CHECK AUTHENTICATION
-  // ========================================
-
   if (!req.session.user) {
     return res.status(401).json({
       error: "Not authenticated."
     });
   }
-
-  // ========================================
-  // RETURN CURRENT USER
-  // ========================================
 
   res.json({
     user: req.session.user
@@ -521,19 +499,21 @@ app.post(
     req.session.destroy((error) => {
       if (error) {
         console.error(
-          "❌ Logout error:",
+          "❌ Internal logout error:",
           error
         );
 
         return res.status(500).json({
-          error: "Unable to log out."
+          error:
+            "An unexpected server error occurred."
         });
       }
 
       res.clearCookie("connect.sid");
 
       res.json({
-        message: "Logout successful."
+        message:
+          "Logout successful."
       });
     });
   }
@@ -550,23 +530,54 @@ function requireAdmin(req, res, next) {
 
   if (!req.session.user) {
     return res.status(401).json({
-      error: "Authentication required."
+      error:
+        "Authentication required."
     });
   }
 
   // ========================================
-  // CHECK ADMIN ROLE
+  // VERIFY CURRENT USER IN DATABASE
   // ========================================
 
-  if (req.session.user.role !== "admin") {
+  const user = db
+    .prepare(`
+      SELECT
+        id,
+        name,
+        email,
+        role
+      FROM users
+      WHERE id = ?
+    `)
+    .get(req.session.user.id);
+
+  // ========================================
+  // USER NO LONGER EXISTS
+  // ========================================
+
+  if (!user) {
+    return res.status(401).json({
+      error:
+        "Authentication required."
+    });
+  }
+
+  // ========================================
+  // CHECK CURRENT DATABASE ROLE
+  // ========================================
+
+  if (user.role !== "admin") {
     return res.status(403).json({
-      error: "Admin access required."
+      error:
+        "Admin access required."
     });
   }
 
   // ========================================
-  // ADMIN AUTHORIZED
+  // STORE VERIFIED ADMIN
   // ========================================
+
+  req.admin = user;
 
   next();
 }
@@ -627,13 +638,13 @@ app.get(
       });
     } catch (error) {
       console.error(
-        "❌ Admin dashboard error:",
+        "❌ Internal admin dashboard error:",
         error
       );
 
       res.status(500).json({
         error:
-          "Unable to load admin dashboard."
+          "An unexpected server error occurred."
       });
     }
   }
@@ -666,12 +677,13 @@ app.get(
       });
     } catch (error) {
       console.error(
-        "❌ Admin users error:",
+        "❌ Internal admin users error:",
         error
       );
 
       res.status(500).json({
-        error: "Unable to load users."
+        error:
+          "An unexpected server error occurred."
       });
     }
   }
