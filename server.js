@@ -94,7 +94,9 @@ app.use(express.json());
 
 app.use(
   session({
-    secret: "kipepeo-market-development-secret",
+    secret:
+      process.env.SESSION_SECRET ||
+      "kipepeo-market-development-secret",
     resave: false,
     saveUninitialized: false,
     cookie: {
