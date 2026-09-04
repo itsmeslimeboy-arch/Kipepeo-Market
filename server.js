@@ -25,24 +25,30 @@ const app = express();
 // SERVER PORT
 // ============================================
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // ============================================
 // DATABASE CONNECTION
 // ============================================
 
-// Build the correct path to the SQLite database
-const dbPath = path.join(
-  __dirname,
-  "database",
-  "kipepeo.db"
-);
+// Use DATABASE_PATH when provided.
+// Otherwise use the local SQLite database.
+//
+// Local:
+// database/kipepeo.db
+//
+// Deployment:
+// /var/data/kipepeo.db
+
+const databasePath =
+  process.env.DATABASE_PATH ||
+  path.join(__dirname, "database", "kipepeo.db");
 
 // Connect to SQLite
-const db = new Database(dbPath);
+const db = new Database(databasePath);
 
 console.log("✅ Database connected successfully.");
-console.log("📍 Database location:", dbPath);
+console.log("📍 Database location:", databasePath);
 
 // ============================================
 // SECURITY — HELMET
@@ -173,13 +179,24 @@ app.get("/", (req, res) => {
 });
 
 // ============================================
+// HEALTH CHECK
+// ============================================
+
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    service: "Kipepeo Market",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// ============================================
 // GET ALL PRODUCTS
 // ============================================
 
 app.get("/api/products", (req, res) => {
   try {
-    // Query products using a parameter-free
-    // prepared statement.
+    // Query products using a prepared statement.
     const products = db
       .prepare(`
         SELECT *
@@ -405,9 +422,8 @@ app.post(
       // FIND USER
       // ========================================
       //
-      // IMPORTANT:
-      // This is a parameterized query.
-      // The email is supplied separately using ?.
+      // Parameterized query protects against
+      // SQL injection.
       //
 
       const user = db
@@ -555,14 +571,46 @@ function requireAdmin(req, res, next) {
   }
 
   // ========================================
+  // RE-CHECK CURRENT ROLE IN DATABASE
+  // ========================================
+
+  const user = db
+    .prepare(`
+      SELECT
+        id,
+        name,
+        email,
+        role
+      FROM users
+      WHERE id = ?
+    `)
+    .get(req.session.user.id);
+
+  // ========================================
+  // CHECK USER STILL EXISTS
+  // ========================================
+
+  if (!user) {
+    return res.status(401).json({
+      error: "Authentication required."
+    });
+  }
+
+  // ========================================
   // CHECK ADMIN ROLE
   // ========================================
 
-  if (req.session.user.role !== "admin") {
+  if (user.role !== "admin") {
     return res.status(403).json({
       error: "Admin access required."
     });
   }
+
+  // ========================================
+  // STORE CURRENT ADMIN
+  // ========================================
+
+  req.admin = user;
 
   // ========================================
   // ADMIN AUTHORIZED
@@ -681,7 +729,7 @@ app.get(
 // START THE SERVER
 // ============================================
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log("============================================");
   console.log("🦋 KIPEPEO MARKET SERVER");
   console.log("============================================");
