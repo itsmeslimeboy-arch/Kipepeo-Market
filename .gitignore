@@ -1,39 +1,43 @@
- Node.js
+# Node.js
 node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
-package-lock.json
-yarn.lock
- Environment variables
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
 .env
 .env.local
-.env..local
- Operating system files
+.env.*.local
+
+# Operating system files
 .DS_Store
 Thumbs.db
 desktop.ini
- IDE files
+
+# IDE files
 .vscode/
 .idea/
-.swp
-.swo
- Build output
+*.swp
+*.swo
+
+# Build output
 dist/
 build/
 out/
- Database files
-.db
-.sqlite
-.sqlite3
- Uploads
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads
 uploads/
 public/uploads/
- Logs
+
+# Logs
 logs/
- .log
-  Temporary files
+*.log
+
+# Temporary files
 tmp/
 temp/
-
-node_modules/ .env *.db .DS_Store Thumbs.db
