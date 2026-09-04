@@ -50,8 +50,8 @@ This project follows a build-first, real-project approach:
 - [x] Chapter 7 — Database Integration
 - [x] Chapter 8 — User Authentication
 - [x] Chapter 9 — Admin Dashboard
-- [ ] Chapter 10 — Testing & Quality
-- [ ] Chapter 11 — Security
+- [x] Chapter 10 — Testing & Quality
+- [x] Chapter 11 — Security
 - [ ] Chapter 12 — Deployment
 
 Contact
